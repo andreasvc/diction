@@ -270,7 +270,7 @@ static int article(const char *word, size_t l) /*{{{*/
   /*}}}*/
   static const char *nl[]= /* Dutch articles (lidwoord) */ /*{{{*/
   {
-    "de", "het", "een", (const char*)0
+    "de", "het", "een", "'t", (const char*)0
   };
   /*}}}*/
   const char **list;
@@ -316,14 +316,19 @@ static int pronoun(const char *word, size_t l) /*{{{*/
   /*}}}*/
   static const char *nl[]= /* Dutch pronouns (voornaamwoord) */ /*{{{*/
   {
-    "ik", 		 	"jij", "je", "u", "gij", "ge", 	"hij", "zij", "ze", "het",			/* persoonlijk voornaamwoord */
-	"wij", "we", 	"jullie", 						/* "zij", "ze", */
-    "me", "mijzelf", "mezelf", "je", "jezelf", "uzelf", 					/* wederkeren voornaamwoord */
-	"zich", "zichzelf", "haarzelf", "onszelf", /* "jezelf", */
-	"elkaar", "elkaars", "elkander", "elkanders", "mekaar", "mekaars",		/* wedekerig voornamwoord */
-    "mijnen",  "deinen", "zijnen",   "haren",    "onzen",   "uwen", "hunnen", "haren",	/* pers. vnw: obsolete naamvallen */
-    "mijner",  "deiner", "zijner",   "harer",    "onzer",   "uwer", "hunner", "harer",
-    "mijnes",  "deines", "zijnes",   "hares",    "onzes",   "uwes", "hunnes", "hares", (const char*)0
+    /* persoonlijk voornaamwoord */
+    "ik", "jij", "je", "u", "hij", "hem", "zij", "ze", "haar", "het",
+    "wij", "we", "ons", "jullie", "hen", "hun"
+    /* wederkerend voornaamwoord */
+    "mij", "me", "mijzelf", "mezelf", "je", "jezelf", "uzelf",
+    "zich", "zichzelf", "haarzelf", "onszelf",
+    "elkaar", "elkaars", "elkander", "elkanders", "mekaar", "mekaars",
+    /* pers. vnw: archaisch */
+    "gij", "ge",
+    "mijnen", "deinen", "zijnen", "haren", "onzen", "uwen", "hunnen", "haren",
+    "mijner", "deiner", "zijner", "harer", "onzer", "uwer", "hunner", "harer",
+    "mijnes", "deines", "zijnes", "hares", "onzes", "uwes", "hunnes", "hares",
+    (const char*)0
   };
   /*}}}*/
 
@@ -343,7 +348,7 @@ static int pronoun(const char *word, size_t l) /*{{{*/
  * Test if the word is an interrogative pronoun.  This function uses
  * docLanguage to determine the used language.
  */
- 
+
 static int interrogativePronoun(const char *word, size_t l) /*{{{*/
 {
   static const char *de[]= /* Interrogativpronomen */ /*{{{*/
@@ -357,15 +362,16 @@ static int interrogativePronoun(const char *word, size_t l) /*{{{*/
     "why", "who", "what", "whom", "when", "where", "how", (const char*)0
   };
   /*}}}*/
-  static const char *nl[]= /* Dutch interrogative pronouns (vragend voornaamwoord) */ /*{{{*/
+  static const char *nl[]= /* Dutch interrogative pronouns (vragend vnw.) */ /*{{{*/
   {
-    "welke", "wat", "wat voor", "wat voor een", "welk", 
-    "wie", "waar", "wanneer", "hoe", (const char*)0
+    "wie", "wat", "waar", "waarom", "wanneer", "hoe", "welk",  "welke",
+    /* covered by "wat": "wat voor", "wat voor een", */
+    (const char*)0
   };
-  /*}}}*/  
-  
+  /*}}}*/
+
   const char **list;
- 
+
   if (strncmp(docLanguage,"de",2)==0) list=de;
   else if (strncmp(docLanguage,"en",2)==0) list=en;
   else if (strncmp(docLanguage,"nl",2)==0) list=nl;
@@ -380,7 +386,7 @@ static int interrogativePronoun(const char *word, size_t l) /*{{{*/
  * Test if the word is an conjunction.  This function uses
  * docLanguage to determine the used language.
  */
- 
+
 static int conjunction(const char *word, size_t l) /*{{{*/
 {
   static const char *de[]= /* Konjunktionen */ /*{{{*/
@@ -396,7 +402,7 @@ static int conjunction(const char *word, size_t l) /*{{{*/
   /*}}}*/
   static const char *nl[]= /* Dutch conjunctions (nevenschikkend voegwoord) */ /*{{{*/
   {
-    "en", "maar", "of", "want", "dus", (const char*)0
+    "en", "maar", "of", "want", "dus", "noch", (const char*)0
   };
   /*}}}*/
 
@@ -416,7 +422,7 @@ static int conjunction(const char *word, size_t l) /*{{{*/
  * Test if the word is a nominalization.  This function uses
  * docLanguage to determine the used language.
  */
- 
+
 static int nominalization(const char *word, size_t l) /*{{{*/
 {
   static const char *de[]= /* Nominalisierungsendungen */ /*{{{*/
@@ -430,7 +436,7 @@ static int nominalization(const char *word, size_t l) /*{{{*/
      "tion", "ment", "ence", "ance", (const char*)0
   };
   /*}}}*/
-  static const char *nl[]= /* Dutch nominalization suffixes (verzelfstandigde werkwoorden */ /*{{{*/
+  static const char *nl[]= /* Dutch nominalization suffixes */ /*{{{*/
   {
      /* vereenvoudigd */
      "tie", "heid", "ing", "end", "ende", (const char*)0
@@ -456,7 +462,7 @@ static int nominalization(const char *word, size_t l) /*{{{*/
  * Test if the word is an sub conjunction.  This function uses
  * docLanguage to determine the used language.
  */
- 
+
 static int subConjunction(const char *word, size_t l) /*{{{*/
 {
   static const char *de[]= /* unterordnende Konjunktionen */ /*{{{*/
@@ -476,24 +482,23 @@ static int subConjunction(const char *word, size_t l) /*{{{*/
   /*}}}*/
   static const char *en[]= /* subordinating conjunctions */ /*{{{*/
   {
-    "after", "because", "lest", "till", "'til", "although", "before", 
-    "now that", "unless", "as", "even if", "provided that", "provided", 
+    "after", "because", "lest", "till", "'til", "although", "before",
+    "now that", "unless", "as", "even if", "provided that", "provided",
     "until", "as if", "even though", "since", "as long as", "so that",
     "whenever", "as much as", "if", "than", "as soon as", "inasmuch",
     "in order that", "though", "while", (const char*)0
   };
   /*}}}*/
-  static const char *nl[]= /* Dutch subordinating conjunctions (onderschikeknde voegwoorden */ /*{{{*/
+  static const char *nl[]= /* Dutch subordinating conjunctions (onderschikkende voegwoorden */ /*{{{*/
   {
-	/* onderschikkende voegwoorden */
-    "aangezien", "als", "alsof", "behalve", "daar", "daarom", "dat", 
-	"derhalve", "doch", "doordat", "hoewel", "mits", "nadat", 
+    /* onderschikkende voegwoorden */
+    "aangezien", "als", "alsof", "behalve", "daar", "daarom", "dat",
+    "derhalve", "doch", "doordat", "hoewel", "indien", "mits", "nadat",
     "noch", "ofschoon", "omdat", "ondanks", "opdat", "sedert", "sinds",
-	"tenzij", "terwijl", "toen", "totdat", "voordat", "wanneer",
-	"zoals", "zodat", "zodra", "zonder dat", 
-	
-	/* infitief constructies */
-	"om te", (const char*)0
+    "tenzij", "terwijl", "toen", "totdat", "voordat", "wanneer",
+    "zoals", "zodat", "zodra", "zonder dat",
+    /* infitief constructies */
+    "om te", (const char*)0
   };
   /*}}}*/
 
@@ -506,10 +511,10 @@ static int subConjunction(const char *word, size_t l) /*{{{*/
 
   while (*list)
   {
-    if (wordcmp(*list,word)==0) 
+    if (wordcmp(*list,word)==0)
     {
       phraseEnd = word+strlen(*list);
-      return 1; 
+      return 1;
     }
     else ++list;
   }
@@ -521,7 +526,7 @@ static int subConjunction(const char *word, size_t l) /*{{{*/
  * Test if the word is an preposition.  This function uses
  * docLanguage to determine the used language.
  */
- 
+
 static int preposition(const char *word, size_t l) /*{{{*/
 {
   static const char *de[]= /* Präpositionen */ /*{{{*/
@@ -555,13 +560,17 @@ static int preposition(const char *word, size_t l) /*{{{*/
   /*}}}*/
   static const char *nl[]= /* Dutch prepositions (voorzetsels) */ /*{{{*/
   {
-    "à", "aan", "ad", "achter", "behalve", "beneden", "betreffende", "bij", "binnen", "blijkens", "boven", "buiten", 
-	"circa", "conform", "contra", "cum", "dankzij", "door", "gedurende", "gezien", "hangende", "in", "ingevolge", 
-	"inzake", "jegens", "krachtens", "langs", "met", "middels", "mits", "na", "naar", "naast", "nabij", "namens", 
-	"niettegenstaande", "nopens", "om", "omstreeks", "omtrent", "ondanks", "onder", "ongeacht", "onverminderd", 
-	"op", "over", "overeenkomstig", "per", "plus", "richting", "rond", "rondom", "sedert", "staande", "te", "tegen", 
-	"tegenover", "ten", "ter", "tijdens", "tot", "tussen", "uit", "uitgezonderd", "van", "vanaf", "vanuit", "vanwege", 
-	"versus", "via", "volgens", "voor", "voorbij", "wegens", "zonder",  (const char*)0
+    "à", "aan", "ad", "achter", "behalve", "beneden", "betreffende", "bij",
+    "binnen", "blijkens", "boven", "buiten", "circa", "conform", "contra",
+    "cum", "dankzij", "door", "gedurende", "gezien", "hangende", "in",
+    "ingevolge", "inzake", "jegens", "krachtens", "langs", "met", "middels",
+    "mits", "na", "naar", "naast", "nabij", "namens", "niettegenstaande",
+    "nopens", "om", "omstreeks", "omtrent", "ondanks", "onder", "ongeacht",
+    "onverminderd", "op", "over", "overeenkomstig", "per", "plus", "richting",
+    "qua", "rond", "rondom", "sedert", "staande", "te", "tegen", "tegenover",
+    "ten", "ter", "tijdens", "tot", "tussen", "uit", "uitgezonderd", "van",
+    "vanaf", "vanuit", "vanwege", "versus", "via", "volgens", "voor",
+    "voorbij", "wegens", "zonder",  (const char*)0
   };
   /*}}}*/
 
@@ -577,7 +586,7 @@ static int preposition(const char *word, size_t l) /*{{{*/
     if (wordcmp(*list,word)==0)
     {
       phraseEnd = word+strlen(*list);
-      return 1; 
+      return 1;
     }
     else ++list;
   }
@@ -589,7 +598,7 @@ static int preposition(const char *word, size_t l) /*{{{*/
  * Test if the word is an auxiliary verb.  This function uses
  * docLanguage to determine the used language.
  */
- 
+
 static int auxVerb(const char *word, size_t l) /*{{{*/
 {
   static const char *de[]= /* Hilfsverben */ /*{{{*/
@@ -616,20 +625,21 @@ static int auxVerb(const char *word, size_t l) /*{{{*/
   /*}}}*/
   static const char *nl[]= /* Dutch auxiliary verbs (hulpwerkwoorden) */ /*{{{*/
   {
-	/* in combinatie met voltooid deelwoord */
-	/* hebben */	"heb",  "hebt", "heeft", "hebben", "had",    "hadden",  "gehad", 
-	/* zijn */		/* "ben",  "bent", "is",    "zijn",   "was",    "waren",   "geweest", */
-	/* worden */	"word", "wordt",         "worden", "werd",   "werden",  "geworden",
+    /* NB: past perfect forms of these verbs are not auxiliary. */
+    /* in combinatie met voltooid deelwoord */
+    /* hebben */  "heb",  "hebt", "heeft", "hebben", "had",    "hadden",
+    /* zijn */ /* "ben",  "bent", "is",    "zijn",   "was",    "waren",  */
+    /* worden */  "word", "wordt",         "worden", "werd",   "werden",
 
-	/* in combinatie met infinitief */
-	/* kunnen */	"kan", "kan",            "kunnen", "kon",    "konden",  "gekund",
-	/*  willen */	"wil",                   "willen", "wilde",  "wilden",  "gewild", "wou", "wouden", 
-	/* zullen */		"zal", "zult",           "zullen", "zou",    "zouden", 
-	/* mogen */	"mag",                   "mogen",  "mocht",  "mochten", "gemogen",
-	/*moeten */	"moet",                  "moeten", "moest",  "moesten", "gemoeten",
-	/* hoeven  */	"hoef", "hoeft",         "hoeven", "hoefde", "hoefden", "gehoeven", 
-	/* doen */		"doe", "doet",           "doen",   "deed",   "deden",   "gedaan",
-	(const char*)0
+    /* in combinatie met infinitief */
+    /* zullen */  "zal", "zult",           "zullen", "zou",    "zouden",
+    /* kunnen */  "kan", "kan", "kunt",  "kunnen", "kon",    "konden",
+    /* willen */  "wil", "wilt", "willen", "wilde", "wilden", "wou", "wouden",
+    /* mogen */   "mag",                   "mogen",  "mocht",  "mochten",
+    /* moeten */  "moet",                  "moeten", "moest",  "moesten",
+    /* hoeven  */ "hoef", "hoeft",         "hoeven", "hoefde", "hoefden",
+    /* doen */    "doe", "doet",           "doen",   "deed",   "deden",
+(const char*)0
   };
   /*}}}*/
 
@@ -642,10 +652,10 @@ static int auxVerb(const char *word, size_t l) /*{{{*/
 
   while (*list)
   {
-    if (wordcmp(*list,word)==0) 
+    if (wordcmp(*list,word)==0)
     {
       phraseEnd = word+strlen(*list);
-      return 1; 
+      return 1;
     }
     else ++list;
   }
@@ -657,7 +667,7 @@ static int auxVerb(const char *word, size_t l) /*{{{*/
  * Test if the word is an 'to be' verb.  This function uses
  * docLanguage to determine the used language.
  */
- 
+
 static int tobeVerb(const char *word, size_t l) /*{{{*/
 {
   static const char *de[]= /* Hilfsverb sein */ /*{{{*/
@@ -674,8 +684,7 @@ static int tobeVerb(const char *word, size_t l) /*{{{*/
   /*}}}*/
   static const char *nl[]= /* Dutch auxiliary verb to be (zijn) */ /*{{{*/
   {
-  "ben", "bent", "is", "zijn", "was", "waren", "geweest",
-  (const char*)0
+  "ben", "bent", "is", "zijn", "was", "waren", (const char*)0
   };
   /*}}}*/
 
@@ -701,9 +710,10 @@ static int vowel(char c) /*{{{*/
 
   switch (lc_ctype_int)
   {
-    case ASCII: return (c=='a' || c=='e' || c=='i' || c=='o' || c=='u'|| c=='y');		/* JDL */
-    case ISO_8859_1: return (c=='a' || c=='ä' || c=='e' || c=='i' || c=='o' || c=='ö' || c=='u' || c=='ü' ||		/* JDL */
-							 c=='ë' || c=='é' || c=='è' || c=='à' || c=='i' || c=='ï' || c=='y');
+    case ASCII: return (c=='a' || c=='e' || c=='i' || c=='o' || c=='u'|| c=='y');       /* JDL */
+    case ISO_8859_1: return (c=='a' || c=='ä' || c=='e' || c=='i' || c=='o' ||
+                             c=='ö' || c=='u' || c=='ü' || c=='ë' || c=='é' ||
+                             c=='è' || c=='à' || c=='i' || c=='ï' || c=='y');       /* JDL */
     default: assert(0);
   }
 }
@@ -737,12 +747,12 @@ static int syll_en(const char *s, size_t l) /*{{{*/
  * @param l the word's length
  */
 static int syll_de(const char *s, size_t l) /*{{{*/
-{  
+{
   int count=0;
   size_t ol=l;
- 
-  if (vowel(*s))  
-  while (l) 
+
+  if (vowel(*s))
+  while (l)
   {
     if (l>=2 && vowel(*s) && !vowel(*(s+1))) { ++count; s+=2; l-=2; }
     else if (l==1 && ol>1 && !vowel(*(s-1)) && *s=='e') { ++count; s+=1; l-=1; }
@@ -761,18 +771,17 @@ static int syll_de(const char *s, size_t l) /*{{{*/
 /**
  * Count syllables for Dutch words by counting vowel-consonant or
  * consonant-vowel pairs, depending on the first character being a vowel or
- * not.  If it is, a trailing e will be handled with a special rule.  This
- * algorithm fails on "vor-ueber".
+ * not.  If it is, a trailing e will be handled with a special rule.
  * @param s the word
  * @param l the word's length
  */
 static int syll_nl(const char *s, size_t l) /*{{{*/
-{  
+{
   int count=0;
   size_t ol=l;
- 
-  if (vowel(*s))  
-  while (l) 
+
+  if (vowel(*s))
+  while (l)
   {
     if (l>=2 && vowel(*s) && !vowel(*(s+1))) { ++count; s+=2; l-=2; }
     else if (l==1 && ol>1 && !vowel(*(s-1)) && *s=='e') { ++count; s+=1; l-=1; }
@@ -798,7 +807,7 @@ static int syll(const char *s, size_t l) /*{{{*/
 {
   assert(s!=(const char*)0);
   assert(l>=1);
-  
+
   if (strncmp(docLanguage,"de",2)==0) return syll_de(s,l);
   else if (strncmp(docLanguage,"en",2)==0) return syll_en(s,l);
   else if (strncmp(docLanguage,"nl",2)==0) return syll_nl(s,l);
@@ -846,7 +855,8 @@ static struct Hit lengths;
  * @param str sentence
  * @param length its length
  */
-static void style(const char *str, size_t length, const char *file, int line, int col, int endLine, int endCol) /*{{{*/
+static void style(const char *str, size_t length, const char *file, int line,
+        int col, int endLine, int endCol) /*{{{*/
 {
   int firstWord=1;
   int inword=0;
@@ -885,33 +895,33 @@ static void style(const char *str, size_t length, const char *file, int line, in
             if (firstWord) ++beginPronouns;
           }
           else if (interrogativePronoun(s-wordLength,wordLength))
-          { 
+          {
             ++interrogativePronouns;
             if (firstWord) ++beginInterrogativePronouns;
           }
-          else if (conjunction(s-wordLength,wordLength)) 
-          { 
+          else if (conjunction(s-wordLength,wordLength))
+          {
             ++conjunctions;
             if (firstWord) ++beginConjunctions;
           }
-          else if (subConjunction(s-wordLength,wordLength)) 
-          { 
+          else if (subConjunction(s-wordLength,wordLength))
+          {
             ++subConjunctions;
             if (firstWord) ++beginSubConjunctions;
           }
-          else if (preposition(s-wordLength,wordLength)) 
-          { 
+          else if (preposition(s-wordLength,wordLength))
+          {
             ++prepositions;
             if (firstWord) ++beginPrepositions;
           }
           else if (tobeVerb(s-wordLength,wordLength))
-          { 
+          {
             ++passive;
             ++tobeVerbs;
           }
           else if (auxVerb(s-wordLength,wordLength)) ++auxVerbs;
           else if (nominalization(s-wordLength,wordLength))
-          { 
+          {
             ++nom;
             ++nominalizations;
           }
@@ -976,10 +986,13 @@ static void style(const char *str, size_t length, const char *file, int line, in
   if (str[length-1]=='?') ++questions;
   noteHit(&lengths,sentWords);
   if (passive) ++passiveSent;
-  if ((printLongSentences && sentWords>=printLongSentences) 
+  if ((printLongSentences && sentWords>=printLongSentences)
       || (printARI && ari(sentLetters,sentWords,1)>printARI)
       || (printPassiveSentences && passive)
-      || (printNomSentences && nom)) printf("%s:%d.%d-%d.%d: %s\n",file,line,col,endLine,endCol,str);
+      || (printNomSentences && nom))
+  {
+      printf("%s:%d.%d-%d.%d: %s\n",file,line, col,endLine,endCol,str);
+  }
 }
 /*}}}*/
 
@@ -1041,7 +1054,8 @@ int main(int argc, char *argv[]) /*{{{*/
     case 'L':
     {
       docLanguage=optarg;
-      if (strncmp(docLanguage,"de",2) && strncmp(docLanguage,"en",2) && strncmp(docLanguage,"nl",2))
+      if (strncmp(docLanguage,"de",2) && strncmp(docLanguage,"en",2)
+              && strncmp(docLanguage,"nl",2))
       {
         fprintf(stderr,_("style: Incorrect language option `%s'.\n"),docLanguage);
         exit(1);
@@ -1056,19 +1070,19 @@ int main(int argc, char *argv[]) /*{{{*/
       break;
     }
     case 'p':
-    { 
-      printPassiveSentences=1; 
+    {
+      printPassiveSentences=1;
       break;
     }
     case 'N':
-    { 
-      printNomSentences=1; 
+    {
+      printNomSentences=1;
       break;
     }
     case 'n':
-    { 
-      printNomSentences=1; 
-      printPassiveSentences=1; 
+    {
+      printNomSentences=1;
+      printPassiveSentences=1;
       break;
     }
     case 'v': fputs("GNU style " VERSION "\n",stdout); exit(0);
@@ -1108,7 +1122,7 @@ int main(int argc, char *argv[]) /*{{{*/
   else while (optind<argc)
   {
     FILE *fp;
-    if ((fp=fopen(argv[optind],"r"))==(FILE*)0) 
+    if ((fp=fopen(argv[optind],"r"))==(FILE*)0)
       fprintf(stderr,_("style: Opening `%s' failed (%s).\n"),argv[optind],strerror(errno));
     else
     {
@@ -1183,9 +1197,9 @@ word usage:
         printf(_("        verb types:\n"));
         printf(_("        to be (%d) auxiliary (%d) \n"), tobeVerbs, auxVerbs);
         printf(_("        types as %% of total:\n"));
-        printf(_("        conjunctions %1.f%% (%d) pronouns %1.f%% (%d) prepositions %1.f%% (%d)\n"), 
-                (100.0*(conjunctions+subConjunctions))/words, 
-                conjunctions+subConjunctions, 
+        printf(_("        conjunctions %1.f%% (%d) pronouns %1.f%% (%d) prepositions %1.f%% (%d)\n"),
+                (100.0*(conjunctions+subConjunctions))/words,
+                conjunctions+subConjunctions,
                 (100.0*pronouns)/words, pronouns, (100.0*prepositions)/words,
                 prepositions);
         printf(_("        nominalizations %1.f%% (%d)\n"),
