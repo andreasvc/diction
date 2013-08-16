@@ -1,3 +1,8 @@
+NB: this is a fork of diction with some improvements to the handling of Dutch in the style program.
+
+Original README:
+----------------
+
 GNU diction and style are free implementations of old standard unix
 commands, that are not available on many modern systems, because they
 have been unbundled.  Diction prints wordy and commonly misused phrases.
