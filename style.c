@@ -1169,13 +1169,13 @@ int main(int argc, char *argv[]) /*{{{*/
     shortLength=((double)words)/sentences-4.5;
     if (shortLength<1) shortLength=1;
     for (i=0,shortSent=0; i<=shortLength; ++i) shortSent+=lengths.data[i];
-    printf(_("        %d%% (%d) short sentences (at most %d words)\n"),100*shortSent/sentences,shortSent,shortLength);
+    printf(_("        %1.2f%% (%d) short sentences (at most %d words)\n"),100.0*shortSent/sentences,shortSent,shortLength);
     longLength=((double)words)/sentences+10.5;
     for (i=longLength,longSent=0; i<=lengths.size; ++i) longSent+=lengths.data[i];
-    printf(_("        %d%% (%d) long sentences (at least %d words)\n"),100*longSent/sentences,longSent,longLength);
+    printf(_("        %1.2f%% (%d) long sentences (at least %d words)\n"),100.0*longSent/sentences,longSent,longLength);
     printf(_("        %d paragraphs, average length %.1f sentences\n"),paragraphs,((double)sentences)/paragraphs);
-    printf(_("        %d%% (%d) questions\n"),100*questions/sentences,questions);
-    printf(_("        %d%% (%d) passive sentences\n"),100*passiveSent/sentences,passiveSent);
+    printf(_("        %1.2f%% (%d) questions\n"),100.0*questions/sentences,questions);
+    printf(_("        %1.2f%% (%d) passive sentences\n"),100.0*passiveSent/sentences,passiveSent);
     printf(_("        longest sent %d wds at sent %d; shortest sent %d wds at sent %d\n"),longestLength,longestLine,shortestLength,shortestLine);
 
 /*
@@ -1197,12 +1197,12 @@ word usage:
         printf(_("        verb types:\n"));
         printf(_("        to be (%d) auxiliary (%d) \n"), tobeVerbs, auxVerbs);
         printf(_("        types as %% of total:\n"));
-        printf(_("        conjunctions %1.f%% (%d) pronouns %1.f%% (%d) prepositions %1.f%% (%d)\n"),
+        printf(_("        conjunctions %1.2f%% (%d) pronouns %1.2f%% (%d) prepositions %1.2f%% (%d)\n"),
                 (100.0*(conjunctions+subConjunctions))/words,
                 conjunctions+subConjunctions,
                 (100.0*pronouns)/words, pronouns, (100.0*prepositions)/words,
                 prepositions);
-        printf(_("        nominalizations %1.f%% (%d)\n"),
+        printf(_("        nominalizations %1.2f%% (%d)\n"),
                 (100.0*nominalizations)/words, nominalizations);
 
         printf(_("sentence beginnings:\n"));
