@@ -871,7 +871,7 @@ static void style(const char *str, size_t length, const char *file, int line,
 
   if (length==0) { ++paragraphs; return; }
   assert(str!=(const char*)0);
-  assert(length>=2);
+  /* assert(length>=2); */
   phraseEnd = (const char*)0;
   while (s<end)
   {
